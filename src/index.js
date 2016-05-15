@@ -5,7 +5,8 @@
  * @author xcarpentier<contact@xaviercarpentier.com>
  */
 
-import React, {
+import React from 'react';
+import {
   StyleSheet,
   View,
   PixelRatio,
@@ -15,8 +16,8 @@ import React, {
   ScrollView,
   Text,
   ListView
-}
-from 'react-native';
+} from 'react-native';
+
 import countries from 'world-countries';
 import _ from 'lodash';
 import CountryFlags from './CountryFlags';
