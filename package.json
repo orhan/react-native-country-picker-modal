@@ -2,7 +2,7 @@
   "name": "react-native-country-picker-modal",
   "version": "0.0.5",
   "description": "Country picker",
-  "main": "dist/index.js",
+  "main": "src/index.js",
   "scripts": {
     "start": "babel src --out-dir dist --presets es2015,react",
     "watch": "babel src --out-dir dist --watch --presets es2015,react"

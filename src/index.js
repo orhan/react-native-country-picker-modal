@@ -5,7 +5,7 @@
  * @author xcarpentier<contact@xaviercarpentier.com>
  */
 
-import React from 'react';
+import React, { Component } from 'react';
 import {
   StyleSheet,
   View,
@@ -23,7 +23,7 @@ import _ from 'lodash';
 import CountryFlags from './CountryFlags';
 import Ratio from './Ratio';
 
-class CountryPicker extends React.Component {
+class CountryPicker extends Component {
 
   constructor(props) {
     super(props);
@@ -108,12 +108,11 @@ class CountryPicker extends React.Component {
 
   _renderCountry(country, index) {
     return (
-      <TouchableOpacity
-        key={index}
-        onPress={()=> this._onSelect(country)}
-        activeOpacity={0.99}>
+      <View
+        key={index}>
         {this._renderCountryDetail(country)}
-    </TouchableOpacity>);
+      </View>
+    );
   }
 
   _renderLetters(letter, index) {
@@ -121,9 +120,9 @@ class CountryPicker extends React.Component {
       <TouchableOpacity
         key={index}
         onPress={()=> this._scrollTo(letter)}
-        activeOpacity={0.6}>
+        activeOpacity={0.4}>
         <View style={styles.letter}>
-          <Text style={styles.letterText}>{letter}</Text>
+          <Text style={[styles.letterText, this.props.modalLetterStyle]}>{letter}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -131,17 +130,21 @@ class CountryPicker extends React.Component {
 
   _renderCountryDetail(country) {
     return (
-      <View style={styles.itemCountry}>
+      <View style={[styles.itemCountry, {borderBottomColor: this.props.modalItemDividerColor}]}>
         <View style={styles.itemCountryFlag}>
           <Image
-            style={styles.imgStyle}
+            style={[styles.imgStyle]}
             source={{uri: CountryFlags[country.cca2]}}/>
         </View>
-        <View style={styles.itemCountryName}>
-          <Text style={styles.countryName}>
+        <TouchableOpacity
+          style={[styles.itemCountryName]}
+          onPress={()=> this._onSelect(country)}
+          activeOpacity={0.4}
+          >
+          <Text style={[styles.countryName, this.props.modalItemStyle]}>
             {this._getCountryName(country)}
           </Text>
-        </View>
+        </TouchableOpacity>
       </View>);
   }
 
@@ -150,14 +153,14 @@ class CountryPicker extends React.Component {
       <View>
         <TouchableOpacity
           onPress={()=> this.setState({modalVisible: true})}
-          activeOpacity={0.7}>
+          activeOpacity={0.4}>
           <View style={styles.touchFlag}>
             <Image
-              style={styles.imgStyle}
+              style={[styles.imgStyle, this.props.flagStyle]}
               source={{uri: CountryFlags[this.state.cca2]}}/>
           </View>
         </TouchableOpacity>
-        <Modal visible={this.state.modalVisible}>
+        <Modal transparent={true} visible={this.state.modalVisible}>
           {/*<ScrollView
             ref={(scrollView) => { this._scrollView = scrollView; }}
             contentContainerStyle={styles.contentContainer}
@@ -167,7 +170,8 @@ class CountryPicker extends React.Component {
             {_.map(this.state.countries, (country, index) => this._renderCountry(country, index))}
           </ScrollView>*/}
           <ListView
-            contentContainerStyle={styles.contentContainer}
+            style={this.props.modalStyle}
+            contentContainerStyle={[styles.contentContainer, this.props.modalListStyle]}
             ref={(scrollView) => { this._scrollView = scrollView; }}
             dataSource={this.state.countries}
             renderRow={(country) => this._renderCountry(country)}
@@ -186,7 +190,6 @@ class CountryPicker extends React.Component {
 var styles = StyleSheet.create({
   contentContainer: {
     width: Ratio.getWidthPercent(100),
-    backgroundColor: '#fff',
     padding: Ratio.getPercent(2)
   },
   touchFlag: {
@@ -200,8 +203,6 @@ var styles = StyleSheet.create({
     resizeMode: 'stretch',
     width: 25,
     height: 19,
-    borderWidth: 1 / PixelRatio.get(),
-    borderColor: '#eee',
     opacity: 0.8
   },
   currentCountry: {
@@ -215,7 +216,10 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     height: Ratio.getHeightPercent(7),
     justifyContent: 'flex-start',
-    alignItems: 'center'
+    alignItems: 'center',
+    borderBottomWidth: 1 / PixelRatio.get(),
+    borderBottomColor: '#ccc',
+    marginRight: 20,
   },
   itemCountrySelect: {
     height: Ratio.getHeightPercent(9)
@@ -232,8 +236,6 @@ var styles = StyleSheet.create({
   itemCountryName: {
     justifyContent: 'center',
     width: Ratio.getWidthPercent(70),
-    borderBottomWidth: 1 / PixelRatio.get(),
-    borderBottomColor: '#ccc',
     height: Ratio.getHeightPercent(7)
   },
   itemCountryNameSelect: {
