@@ -38,6 +38,10 @@ class CountryPicker extends Component {
     this.lettersPositions = {};
   }
 
+  open() {
+    this.setState({modalVisible: true});
+  }
+
   _getCountry(cca2) {
     return _.find(countries, {
       cca2: cca2
