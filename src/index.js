@@ -42,6 +42,10 @@ class CountryPicker extends Component {
     this.setState({modalVisible: true});
   }
 
+  setVisible(visible) {
+    this.setState({modalVisible: visible});
+  }
+
   _getCountry(cca2) {
     return _.find(countries, {
       cca2: cca2
