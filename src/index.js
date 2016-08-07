@@ -173,7 +173,7 @@ class CountryPicker extends Component {
             scrollsToTop={true}>
             {_.map(this.state.countries, (country, index) => this._renderCountry(country, index))}
           </ScrollView>*/}
-          {this.props.renderHeader()}
+          {this.props.renderHeader ? this.props.renderHeader() : null}
           <ListView
             style={this.props.modalStyle}
             contentContainerStyle={[styles.contentContainer, this.props.modalListStyle]}
