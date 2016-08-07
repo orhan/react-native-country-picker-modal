@@ -183,7 +183,7 @@ class CountryPicker extends Component {
             initialListSize={20}
             pageSize={countries.length - 20}
           />
-          <View style={styles.letters}>
+          <View style={[styles.letters, {top: this.props.lettersTopOffset || 0}]}>
             {_.map(this.letters, (letter, index) => this._renderLetters(letter, index))}
           </View>
         </Modal>
