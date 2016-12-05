@@ -160,7 +160,11 @@ class CountryPicker extends Component {
     return (
       <View>
         <TouchableOpacity
-          onPress={()=> this.setState({modalVisible: true})}
+          onPress={() => {
+            if (this.props.enabled) {
+              this.setState({modalVisible: true})
+            }
+          }}
           activeOpacity={0.4}>
           <View style={styles.touchFlag}>
             <Image
@@ -275,5 +279,12 @@ var styles = StyleSheet.create({
     fontSize: Ratio.getHeightPercent(2.2)
   }
 });
+
+/**
+ * CountryPicker default props
+ */
+CountryPicker.defaultProps = {
+  enabled: true,
+};
 
 module.exports = CountryPicker;
