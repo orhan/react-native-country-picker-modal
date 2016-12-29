@@ -33,16 +33,16 @@ class CountryPicker extends Component {
       currentCountry: this._getCountry(props.cca2),
       modalVisible: false,
       listViewDataSource: ds,
-      countries: ds.cloneWithRows(this._orderCountryList())
+      countries: ds.cloneWithRows(this._orderCountryList(this.props.filterBy))
     };
     this.letters = _.range('A'.charCodeAt(0), 'Z'.charCodeAt(0) + 1).map(n => String.fromCharCode(n).substr(0));
     this.lettersPositions = {};
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.filterBy) {
+    if (nextProps.filterBy != this.props.filterBy) {
       this.setState({
-        countries: this.state.listViewDataSource.cloneWithRows(this._orderCountryList())
+        countries: this.state.listViewDataSource.cloneWithRows(this._orderCountryList(nextProps.filterBy))
       });
     }
   }
@@ -66,10 +66,10 @@ class CountryPicker extends Component {
     return (country.translations[translation] && country.translations[translation].common) || country.name.common;
   }
 
-  _orderCountryList() {
+  _orderCountryList(filterBy = null) {
     return _(countries)
       .filter(n => {
-        if (this.props.filterBy && n.name.indexOf(this.props.filterBy) == -1) {
+        if (filterBy && n.name.common.toUpperCase().indexOf(filterBy.toUpperCase()) == -1) {
           return false;
         } else {
           return true;
@@ -110,7 +110,7 @@ class CountryPicker extends Component {
     const windowHeight = Ratio.getHeightPercent(100);
 
     // find position of first country that starts with letter
-    const index = this._orderCountryList().map((country) => {
+    const index = this._orderCountryList(this.props.filterBy).map((country) => {
       return this._getCountryName(country)[0];
     }).indexOf(letter);
     if (index === -1) {
