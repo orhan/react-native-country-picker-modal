@@ -32,10 +32,19 @@ class CountryPicker extends Component {
       cca2: props.cca2,
       currentCountry: this._getCountry(props.cca2),
       modalVisible: false,
+      listViewDataSource: ds,
       countries: ds.cloneWithRows(this._orderCountryList())
     };
     this.letters = _.range('A'.charCodeAt(0), 'Z'.charCodeAt(0) + 1).map(n => String.fromCharCode(n).substr(0));
     this.lettersPositions = {};
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.filterBy) {
+      this.setState({
+        countries: this.state.listViewDataSource.cloneWithRows(this._orderCountryList())
+      });
+    }
   }
 
   open() {
@@ -55,11 +64,17 @@ class CountryPicker extends Component {
   _getCountryName(country) {
     let translation = this.props.translation || 'eng';
     return (country.translations[translation] && country.translations[translation].common) || country.name.common;
-    xrg
   }
 
   _orderCountryList() {
     return _(countries)
+      .filter(n => {
+        if (this.props.filterBy && n.name.indexOf(this.props.filterBy) == -1) {
+          return false;
+        } else {
+          return true;
+        }
+      })
       .map(n => {
         return {
           cca2: n.cca2,
