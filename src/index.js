@@ -203,8 +203,9 @@ class CountryPicker extends Component {
             ref={(scrollView) => { this._scrollView = scrollView; }}
             dataSource={this.state.countries}
             renderRow={(country) => this._renderCountry(country)}
-            initialListSize={20}
+            initialListSize={countries.length}
             pageSize={countries.length - 20}
+            removeClippedSubviews={false}
           />
           <View style={[styles.letters, {top: this.props.lettersTopOffset || 0}]}>
             {_.map(this.letters, (letter, index) => this._renderLetters(letter, index))}
